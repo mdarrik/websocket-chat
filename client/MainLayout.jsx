@@ -106,7 +106,7 @@ export default ({ children, user }) => (
       </Center>
     </ContentWrapper>
     <FullScreen>
-      <BackgroundImage src="background.jpg" />
+      <BackgroundImage src="background.png" />
       <Overlay
         opacity={0.4}
         background="#212121"
