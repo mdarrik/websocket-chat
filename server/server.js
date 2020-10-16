@@ -1,3 +1,9 @@
+const beeline = require("honeycomb-beeline")({
+  writeKey: process.env.HONEYCOMB_API_KEY,
+  dataset: "websocket-chat",
+  serviceName: "server"
+});
+
 const server = require('http').createServer()
 const io = require('socket.io')(server)
 
