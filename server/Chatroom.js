@@ -1,13 +1,23 @@
+const beeline = require('honeycomb-beeline');
+
 module.exports = function ({ name, image }) {
   const members = new Map()
   let chatHistory = []
 
   function broadcastMessage(message) {
-    members.forEach(m => m.emit('message', message))
+    beeline.withSpan({
+      name: 'broadcastMessage',
+      entry: message
+    }, () => { members.forEach(m => m.emit('message', message)) }
+    )
   }
 
   function addEntry(entry) {
-    chatHistory = chatHistory.concat(entry)
+    beeline.withSpan({
+      name: 'addEntry',
+      entry: entry
+    }, () => { chatHistory = chatHistory.concat(entry) }
+    )
   }
 
   function getChatHistory() {

@@ -1,3 +1,5 @@
+const beeline = require('honeycomb-beeline');
+
 function makeHandleEvent(client, clientManager, chatroomManager) {
   function ensureExists(getter, rejectionMessage) {
     return new Promise(function (resolve, reject) {
@@ -33,12 +35,15 @@ function makeHandleEvent(client, clientManager, chatroomManager) {
   function handleEvent(chatroomName, createEntry) {
     return ensureValidChatroomAndUserSelected(chatroomName)
       .then(function ({ chatroom, user }) {
+        let trace = beeline.startTrace({ name: 'handleEvent' });
         // append event to chat history
         const entry = { user, ...createEntry() }
+        beeline.addContext({ entry: entry })
         chatroom.addEntry(entry)
 
         // notify other clients in chatroom
         chatroom.broadcastMessage({ chat: chatroomName, ...entry })
+        beeline.finishTrace(trace)
         return chatroom
       })
   }
